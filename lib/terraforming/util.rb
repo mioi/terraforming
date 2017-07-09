@@ -26,5 +26,13 @@ module Terraforming
         json.strip
       end
     end
+
+    def self.set_options(options)
+      @options = options
+    end
+
+    def self.get_options
+      @options
+    end
   end
 end

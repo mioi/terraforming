@@ -1,5 +1,6 @@
 module Terraforming
   class CLI < Thor
+    include Terraforming::Util
     class_option :merge, type: :string, desc: "tfstate file to merge"
     class_option :overwrite, type: :boolean, desc: "Overwrite existing tfstate"
     class_option :tfstate, type: :boolean, desc: "Generate tfstate"
@@ -160,6 +161,7 @@ module Terraforming
     end
 
     desc "r53z", "Route53 Hosted Zone"
+    option :zone, type: :string, desc: "AWS Route53 Hosted Zone"
     def r53z
       execute(Terraforming::Resource::Route53Zone, options)
     end
@@ -233,6 +235,7 @@ module Terraforming
     end
 
     def execute(klass, options)
+      Terraforming::Util.set_options(options)
       configure_aws(options)
       result = options[:tfstate] ? tfstate(klass, options[:merge]) : tf(klass)
 

@@ -13,6 +13,7 @@ module Terraforming
 
       def initialize(client)
         @client = client
+        @options = Terraforming::Util.get_options
       end
 
       def tf
@@ -49,7 +50,11 @@ module Terraforming
       private
 
       def hosted_zones
-        @client.list_hosted_zones.map(&:hosted_zones).flatten.map { |hosted_zone| @client.get_hosted_zone(id: hosted_zone.id) }
+        zones = @client.list_hosted_zones.map(&:hosted_zones).flatten
+        if @options[:zone]
+          zones = zones.select {|zone| zone.name == "#{@options[:zone]}." }
+        end
+        zones.map { |hosted_zone| @client.get_hosted_zone(id: hosted_zone.id) }
       end
 
       def tags_of(hosted_zone)
