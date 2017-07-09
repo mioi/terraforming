@@ -156,6 +156,7 @@ module Terraforming
     end
 
     desc "r53r", "Route53 Record"
+    option :zone, type: :string, desc: "AWS Route53 Hosted Zone"
     def r53r
       execute(Terraforming::Resource::Route53Record, options)
     end
